@@ -43,6 +43,7 @@ class AuthViewModel: ViewModel, AuthViewModelIntput, AuthViewModelOutput  {
     private let isSuccessCredentialsPublishSubject: PublishSubject<Bool> = .init()
     private let postCredentialsPublishSubject: PublishSubject<String> = .init()
     private let activityIndicatorPublishSubject: PublishSubject<Bool> = .init()
+    private var authProvider = AuthProvider()
 
     //MARK:- Outputs
     
@@ -66,13 +67,13 @@ class AuthViewModel: ViewModel, AuthViewModelIntput, AuthViewModelOutput  {
     }
     func validateCredentials() {
         if userNamePublishSubject.value.count < 6 && passwordPublishSubject.value.count < 7 {
-            credentialsErrorPublishSubject.onNext(ValidationError.incorrectCredentials.rawValue)
+            credentialsErrorPublishSubject.onNext(ValidationError.incorrectCredentials.errerDescription)
             isValidCredentialsPublishSubject.onNext(false)
         } else if userNamePublishSubject.value.count < 6 {
-            credentialsErrorPublishSubject.onNext(ValidationError.incorrectUsername.rawValue)
+            credentialsErrorPublishSubject.onNext(ValidationError.incorrectUsername.errerDescription)
             isValidCredentialsPublishSubject.onNext(false)
         } else if passwordPublishSubject.value.count < 7 {
-            credentialsErrorPublishSubject.onNext(ValidationError.incorrectPassword.rawValue)
+            credentialsErrorPublishSubject.onNext(ValidationError.incorrectPassword.errerDescription)
             isValidCredentialsPublishSubject.onNext(false)
         } else {
             isValidCredentialsPublishSubject.onNext(true)
@@ -81,7 +82,7 @@ class AuthViewModel: ViewModel, AuthViewModelIntput, AuthViewModelOutput  {
     
     func performLogin() {
         self.activityIndicatorPublishSubject.onNext(true)
-        AuthClient.postCredentials(username: userNamePublishSubject.value, password: passwordPublishSubject.value) { [weak self] success, error in
+        authProvider.postCredentials(username: userNamePublishSubject.value, password: passwordPublishSubject.value) { [weak self] success, error in
             guard let self = self else {return}
             self.activityIndicatorPublishSubject.onNext(false)
             guard success else {

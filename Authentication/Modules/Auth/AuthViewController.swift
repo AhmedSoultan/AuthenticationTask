@@ -48,7 +48,7 @@ class AuthViewController: BaseViewController<AuthViewModel> {
        
         passwordTextField.rx.text.map {$0 ?? ""}.bind(to: viewModel.inputs.passwordPublishSubject).disposed(by: self.disposeBag)
        
-        viewModel.outputs.credentialsErrorObservable.subscribe(onNext: {[weak self] errorMessage in
+        viewModel.outputs.credentialsErrorObservable.subscribe(onNext: {[weak self] (errorMessage) in
             guard let self = self else {return}
             Alert.present(Title: "Warnning", Message: errorMessage, self)
         }).disposed(by: self.disposeBag)

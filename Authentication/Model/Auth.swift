@@ -8,6 +8,7 @@
 import Foundation
 
 struct Auth {
-    static var token = UserDefaults.standard.string(forKey: "token") as? String
+    static var token = UserDefaults.standard.string(forKey: "token")
+    static var refreshToken = UserDefaults.standard.string(forKey: "refreshToken")
     static var isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
 }

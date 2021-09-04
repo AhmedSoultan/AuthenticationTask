@@ -9,25 +9,31 @@ import XCTest
 @testable import Authentication
 
 class AuthenticationTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    
+    let mockAuthParser = MockAuthParser()
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        mockAuthParser.reset()
     }
+    
+    func testparseResponse() throws {
+        
+        mockAuthParser.shouldReturnError = false
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        guard let imageMetaData = mockAuthParser.parseResponse(mockAuthParser.jsonResponse, responseType: ProfileResponse.self) else {
+            XCTFail()
+            return
         }
+        XCTAssertNotNil(imageMetaData)
     }
-
+    
+    func testParseProfile() throws {
+        
+        mockAuthParser.shouldReturnError = false
+        guard let profile = self.mockAuthParser.parse(self.mockAuthParser.jsonResponse, responseType: ProfileResponse.self) else {
+            XCTFail()
+            return
+        }
+        XCTAssertNotNil(profile)
+    }
 }

@@ -7,9 +7,20 @@
 
 import Foundation
 
-enum ValidationError:String {
-    
+enum ValidationError: LocalizedError {
     case incorrectUsername
     case incorrectPassword
     case incorrectCredentials
+}
+extension ValidationError {
+    var errerDescription: String {
+        switch self {
+        case .incorrectUsername:
+            return "incorrectUsername"
+        case .incorrectPassword:
+            return "incorrectUsername"
+        case .incorrectCredentials:
+            return "incorrectUsername"
+        }
+    }
 }

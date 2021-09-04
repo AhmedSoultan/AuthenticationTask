@@ -26,7 +26,8 @@ class ProfileViewModel: ViewModel, ProfileViewModelOutput,  ProfileViewModelIntp
     private let profileErrorPublishSubject: PublishSubject<String> = .init()
     private let profileModelPublishSubject: PublishSubject<UserProfileViewModel> = .init()
     private let activityIndicatorPublishSubject: PublishSubject<Bool> = .init()
-
+    
+    private var authProvider = AuthProvider()
 
     var inputs: ProfileViewModelIntput {
         return self
@@ -64,7 +65,7 @@ class ProfileViewModel: ViewModel, ProfileViewModelOutput,  ProfileViewModelIntp
     
     private func fetchUserProfile() {
         self.activityIndicatorPublishSubject.onNext(true)
-        AuthClient.getUserProfile { [weak self] (userProfile, error) in
+        authProvider.getUserProfile { [weak self] (userProfile, error) in
             guard let self = self else {return}
             self.activityIndicatorPublishSubject.onNext(false)
             guard userProfile != nil else {
